@@ -17,18 +17,25 @@ def main():
     paras, _ = load_paras(filename)
     paras = [clean_puncts(elm) for elm in paras]
 
-    df = pd.DataFrame({'text': paras, 'label': range(len(paras))})
+    # label starts at 1
+    df = pd.DataFrame({'text': paras, 'label': range(1, 1 + len(paras))})
+
+    df.to_csv('df.csv', index=False)
+    # df = pd.read_csv('/content/data/df.csv')  # in colab
 
     # df_0 = df.copy()
     df_0 = pd.DataFrame()
+
+    # label starts at 1
     for idx, elm in enumerate(df.text):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
         _ = [*gen_noised_doc(df.text[idx], 99)]
-        
+
         # df_i = pd.DataFrame({'text': _, 'label': [idx] * len(_)})
+
         # label starts with 1
         df_i = pd.DataFrame({'text': _, 'label': [idx + 1] * len(_)})
-        
+
         # df0a = df_0.append(df_i)
         # df0b = pd.concat([df_0, df_i])
         # assert np.all(df0a == df0b)
@@ -47,6 +54,7 @@ def main():
 
     # df.label.value_counts()
 
+    # shuffle
     df_0 = df_0.sample(frac=1).reset_index(drop=True)
 
     outfile = Path(filename).stem + '_noised' + Path(filename).suffix
