@@ -62,7 +62,7 @@ def main():
     # row slice
     # train /dev, 0.3
     len_ = df_1.shape[0]
-    cutp = int(0.3 * len_)
+    cutp = int(0.1 * len_)
     test = df_1[:cutp]
     train = df_1[cutp: ]
 
