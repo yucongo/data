@@ -24,7 +24,11 @@ def main():
     for idx, elm in enumerate(df.text):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
         _ = [*gen_noised_doc(df.text[idx], 99)]
-        df_i = pd.DataFrame({'text': _, 'label': [idx] * len(_)})
+        
+        # df_i = pd.DataFrame({'text': _, 'label': [idx] * len(_)})
+        # label starts with 1
+        df_i = pd.DataFrame({'text': _, 'label': [idx + 1] * len(_)})
+        
         # df0a = df_0.append(df_i)
         # df0b = pd.concat([df_0, df_i])
         # assert np.all(df0a == df0b)
