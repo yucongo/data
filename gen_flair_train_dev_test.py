@@ -87,7 +87,7 @@ def main():
 
         # label starts with 1
         # df_i = pd.DataFrame({'text': _, 'label': [idx + 1] * len(_)})
-        label_lst = [f'l_{elm}' for elm in [idx + 1] * len(_)]
+        label_lst = [f'__label__{elm}' for elm in [idx + 1] * len(_)]
         df_i = pd.DataFrame({'label': label_lst, 'text': _,})
 
         # df0a = df_0.append(df_i)
@@ -142,16 +142,19 @@ def main():
     df_0[:cutp1].to_csv(
         OUTFILES[0],
         index=False,
+        header = False,
         sep='\t',
     )
     df_0[cutp1:cutp2].to_csv(
         OUTFILES[1],
         index=False,
+        header = False,
         sep='\t',
     )
     df_0[cutp2:].to_csv(
         OUTFILES[2],
         index=False,
+        header = False,
         sep='\t',
     )
 
