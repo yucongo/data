@@ -8,7 +8,7 @@ DIRNAME = 'data/flairdata'
 
 for elm in ['train', 'test', 'dev']:
     globals()[f'{elm.upper()}_FILE'] = f'{elm}_{STEM}'
-    LOGGER.debug('%s, %s', f'{elm.upper()}_FILE', globals()[f'{elm.upper()}_FILE'])
+    print(f'{elm.upper()}_FILE', globals()[f'{elm.upper()}_FILE'])
 
 # ##### install and import packages
 try: import flair
