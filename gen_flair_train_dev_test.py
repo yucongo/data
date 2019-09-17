@@ -148,13 +148,13 @@ def main():
     df_0[cutp1:cutp2].to_csv(
         OUTFILES[1],
         index=False,
-        header = False,
+        header=False,
         sep='\t',
     )
     df_0[cutp2:].to_csv(
         OUTFILES[2],
         index=False,
-        header = False,
+        header=False,
         sep='\t',
     )
 
