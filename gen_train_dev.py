@@ -34,7 +34,7 @@ def gen_train_dev(filename, numb=99):
     # for idx, elm in enumerate(df.text):
     for idx, elm in enumerate(tqdm(paras, desc=' gen aux data...', leave=1)):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
-        _ = [*gen_noised_doc(df.text[idx], numb)]
+        _ = [*gen_noised_doc(elm, numb)]
 
         # df_i = pd.DataFrame({'text': _, 'label': [idx] * len(_)})
 
