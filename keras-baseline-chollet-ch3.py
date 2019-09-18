@@ -10,7 +10,7 @@ https://machinelearningmastery.com/multi-class-classification-tutorial-keras-dee
 '''
 from pathlib import Path
 import pandas as pd
-imort numpy as np
+import numpy as np
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -52,3 +52,4 @@ model.add(layers.Dense(1, activation='sigmoid'))
 model.compile(optimizer='rmsprop',
 loss='binary_crossentropy',
 metrics=['accuracy'])
+
