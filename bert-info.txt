@@ -1,0 +1,36 @@
+'''
+C:\Users\mike\Downloads\Beginner’s Guide to BERT for Multi-classification Task.html
+
+bert github
+
+bert pretained models
+    https://github.com/google-research/bert#pre-trained-models
+    base uncased: https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip 389MB
+        4.Cola (The Corpus of Linguistic Acceptability)
+
+In the original version of BERT, run_classifier.py is based on reading input from three tsv files:
+1.train.tsv (no header)
+2.dev.tsv (evaluation, no header)
+3.test.tsv (header is required)
+
+For train.tsv and dev.tsv, you should have the following format (no header):
+a550d    1    a    To clarify, I didn't delete these pages.
+kcd12    0    a    Dear god this site is horrible.
+7379b    1    a    I think this is not appropriate.
+cccfd    2    a    The title is fine as it is.
+
+df_bert = pd.DataFrame({'guid': df_train['id'],
+    'label': df_train['label'],
+    'alpha': ['a']*df_train.shape[0],
+    'text': df_train['text']})
+
+Original code
+def get_labels(self):
+    return ["0", "1"]
+
+5 labels multi-classification task
+def get_labels(self):
+    return ["0", "1", "2", "3", "4"]
+
+
+'''
