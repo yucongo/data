@@ -168,3 +168,18 @@ Below is the traceback from this internal error.
 09/15/2019 01:11:20 - INFO - root -   
 Unfortunately, your original traceback can not be constructed.
 
+09/18/2019 11:41:10 - INFO - root -   Loading model:
+BertClassifier(bert_config_json=None, bert_model='bert-base-uncased',
+               bert_vocab=None, do_lower_case=None, epochs=2, eval_batch_size=8,
+               fp16=False, from_tf=False, gradient_accumulation_steps=1,
+               ignore_label=None, label_list=None, learning_rate=2e-05,
+               local_rank=-1, logfile='bert_sklearn.log', loss_scale=0,
+               max_seq_length=32, num_mlp_hiddens=50, num_mlp_layers=0,
+               random_state=42, restore_file=None, train_batch_size=16,
+               use_cuda=True, validation_fraction=0.1, warmup_proportion=0.1)
+09/18/2019 11:42:08 - INFO - bert_sklearn.model.pytorch_pretrained.file_utils -   https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt not found in cache, downloading to C:\Users\Public\Documents\Wondershare\CreatorTemp\tmpbnu86y8k
+09/18/2019 11:42:10 - INFO - bert_sklearn.model.pytorch_pretrained.file_utils -   copying C:\Users\Public\Documents\Wondershare\CreatorTemp\tmpbnu86y8k to cache at C:\Users\mike\.cache\torch\pytorch_pretrained_bert\26bc1ad6c0ac742e9b52263248f6d0f00068293b33709fae12320c0e35ccfbbb.542ce4285a40d23a559526243235df47c5f75c197f04f37d1a0c124c32c9a084
+09/18/2019 11:42:10 - INFO - bert_sklearn.model.pytorch_pretrained.file_utils -   creating metadata file for C:\Users\mike\.cache\torch\pytorch_pretrained_bert\26bc1ad6c0ac742e9b52263248f6d0f00068293b33709fae12320c0e35ccfbbb.542ce4285a40d23a559526243235df47c5f75c197f04f37d1a0c124c32c9a084
+09/18/2019 11:42:10 - INFO - bert_sklearn.model.pytorch_pretrained.file_utils -   removing temp file C:\Users\Public\Documents\Wondershare\CreatorTemp\tmpbnu86y8k
+09/18/2019 11:42:10 - INFO - bert_sklearn.model.pytorch_pretrained.tokenization -   loading vocabulary file https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt from cache at C:\Users\mike\.cache\torch\pytorch_pretrained_bert\26bc1ad6c0ac742e9b52263248f6d0f00068293b33709fae12320c0e35ccfbbb.542ce4285a40d23a559526243235df47c5f75c197f04f37d1a0c124c32c9a084
+09/18/2019 11:42:11 - INFO - bert_sklearn.model.pytorch_pretrained.file_utils -   https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-pytorch_model.bin not found in cache, downloading to C:\Users\Public\Documents\Wondershare\CreatorTemp\tmpqd7yykza
