@@ -4,30 +4,35 @@ gen train dev sets
 from pathlib import Path
 import pandas as pd
 
-from load_paras import load_paras
+from tqdm import tqdm
+
+# from load_paras import load_paras
 from gen_noised_doc import gen_noised_doc
 from clean_puncts import clean_puncts
-
+from txtfile_to_paras import txtfile_to_paras
 
 def gen_train_dev(filename, numb=99):
     ''' gen_train_dev '''
 
     # filename = 'wu_ch3_en.txt'
 
-    paras, _ = load_paras(filename)
+    # paras, _ = load_paras(filename)
+    paras = txtfile_to_paras(filename)
+
     paras = [clean_puncts(elm) for elm in paras]
 
     # label starts at 1
-    df = pd.DataFrame({'text': paras, 'label': range(1, 1 + len(paras))})
+    # df = pd.DataFrame({'text': paras, 'label': range(1, 1 + len(paras))})
 
-    df.to_csv('df.csv', index=False)
+    # df.to_csv('df.csv', index=False)
     # df = pd.read_csv('/content/data/df.csv')  # in colab
 
     # df_0 = df.copy()
     df_0 = pd.DataFrame()
 
     # label starts at 1
-    for idx, elm in enumerate(df.text):
+    # for idx, elm in enumerate(df.text):
+    for idx, elm in enumerate(tqdm(df.text, desc=' gen aux data...', leave=1)):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
         _ = [*gen_noised_doc(df.text[idx], numb)]
 
