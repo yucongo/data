@@ -9,10 +9,10 @@ from gen_noised_doc import gen_noised_doc
 from clean_puncts import clean_puncts
 
 
-def main():
-    ''' main '''
+def gen_train_dev(filename, numb=99):
+    ''' gen_train_dev '''
 
-    filename = 'wu_ch3_en.txt'
+    # filename = 'wu_ch3_en.txt'
 
     paras, _ = load_paras(filename)
     paras = [clean_puncts(elm) for elm in paras]
@@ -29,7 +29,7 @@ def main():
     # label starts at 1
     for idx, elm in enumerate(df.text):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
-        _ = [*gen_noised_doc(df.text[idx], 99)]
+        _ = [*gen_noised_doc(df.text[idx], numb)]
 
         # df_i = pd.DataFrame({'text': _, 'label': [idx] * len(_)})
 
@@ -84,4 +84,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    pass
