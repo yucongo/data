@@ -52,4 +52,4 @@ model.add(layers.Dense(1, activation='sigmoid'))
 model.compile(optimizer='rmsprop',
 loss='binary_crossentropy',
 metrics=['accuracy'])
-
+print('model.compile end...')
