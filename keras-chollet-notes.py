@@ -17,7 +17,7 @@ label_type = ['neg', 'pos']
 # >>> text = [t1, t2, t3, t4, ]
 # >>> labels = [0, 0, 1, 1, 0, ]
 
-# list 6.9
+# Listing 6.9
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
