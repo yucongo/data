@@ -56,22 +56,37 @@ from txtfile_to_paras import txtfile_to_paras
 from clean_puncts import clean_puncts
 from tqdm import tqdm
 
-INFILE = 'wu_ch1_en_noised.txt'  # !ls wu*ch1*.txt
 # INFILE =
 # texts =
 df_en = pd.read_csv(INFILE)
 NB_OUTPUT = df_en.label.value_counts().shape[0]
 
 ENFILE = 'wu_ch1_en.txt'
+ZHFILE = 'wu_ch1_zh.txt'
+
+ENFILE = 'lover-ch10_sents45-40_en.txt'
+ZHFILE = 'lover-ch10_sents45-40_zh.txt'
+
+ENFILE = 'lover-ch10_en.txt'
+ZHFILE = 'lover-ch10_zh.txt'
+
+# INFILE = 'wu_ch1_en_noised.txt'  # !ls wu*ch1*.txt
+INFILE = '%s_noised.txt' % Path(ENFILE).stem
+
+# gen_train_dev(ENFILE, 299)
+
+assert Path(ENFILE).exists(), '<%s> does not exist' % ENFILE
+assert Path(ZHFILE).exists(), '<%s> does not exist' % ZHFILE
+assert Path(INFILE).exists(), '<%s> does not exist' % INFILE
+
 en_paras = txtfile_to_paras(ENFILE)
 en_texts = [clean_puncts(elm).lower() for elm in en_paras]
 
-ZHFILE = 'wu_ch1_zh.txt'
 zh_paras = txtfile_to_paras(ZHFILE)
 # len(zh_paras)  # 33
 
 mt_texts = []
-for elm in tqdm(zh_paras, leave=1, descr=' gen aux data (mt)'):
+for elm in tqdm(zh_paras, leave=1, desc=' gen aux data (mt)'):
     mt_texts += [google_tr(elm, 'zh', 'en')]
 mt_texts = [clean_puncts(elm).lower() for elm in mt_texts]
 
@@ -80,7 +95,7 @@ texts = [clean_puncts(elm) for elm in texts]
 
 labels = df_en.label.values
 labels0 = labels[:]
-df_en.head(), texts[:12], mt_texts[:5]
+df_en.head(), texts[:2], mt_texts[:2]
 
 # @title Preparing data
 # @markdown INFILE = 'wu_ch1_en_noised.txt'
@@ -97,12 +112,19 @@ vocab_size = len(word_index) + 1
 print('Found %s unique tokens.' % len(word_index))
 # ch1 1626 unique tokens
 # ch1 1938 (wit mt_texts) unique tokens
+# ch1 2067 (199, wit mt_texts unique tokens
 
 data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
 
 labels = to_categorical(np.asarray(labels))
 print('Shape of data tensor:', data.shape)
 print('Shape of label tensor:', labels.shape)
+
+assert data.shape[0] == labels.shape[0], ' data.shape[0] and labels.shape[0] mismatch'
+
+# ch1 gen_noised_doc(numb=199)
+# Shape of data tensor: (4417, 500)
+# Shape of label tensor: (4417, 30)
 
 # split the data into a training set and a validation set
 indices = np.arange(data.shape[0])
@@ -121,7 +143,7 @@ y_val = labels[-nb_validation_samples:]
 
 len_lst = [len(elm) for elm in texts]
 print(max(len_lst), np.mean(len_lst), len_lst[:10])  # 1530 474.8
-print('NB_OUTPUT: ', NB_OUTPUT)
+print('\n*** NB_OUTPUT: %s ***\n' % NB_OUTPUT)
 
 # @title Define mode and Train
 # @markdown INFILE = 'wu_ch1_en_noised.txt'
@@ -144,7 +166,9 @@ def baseline_model():
 '''
 from keras.layers.embeddings import Embedding
 
-EMBEDDING_DIM = 2 * NB_OUTPUT  # 2-5 times NB_OUTPUT
+EMBEDDING_DIM = 3 * NB_OUTPUT  # 2-5 times NB_OUTPUT
+EMBEDDING_DIM = 150  # 2-5 times NB_OUTPUT
+EMBEDDING_DIM = 100  # 2-5 times NB_OUTPUT
 
 print(" EMBEDDING_DIM: ", EMBEDDING_DIM)
 
@@ -163,7 +187,7 @@ model.add(Flatten())
 # model.add(layers.Dense(32, activation='relu'))
 # model.add(layers.Dense(32, activation='relu'))
 # model.add(layers.Dense(8, activation='relu'))
-model.add(layers.Dense(NB_OUTPUT + 1, activation='softmax'))
+model.add(layers.Dense(NB_OUTPUT, activation='softmax'))
 
 # markdown epochs
 
@@ -174,9 +198,10 @@ model.compile(
     metrics=['acc'],
 )
 print(model.summary())
+
 history = model.fit(
     x_train, y_train,
-    epochs=20,
+    epochs=8,
     batch_size=256,
     validation_data=(x_val, y_val),
 )
@@ -208,22 +233,38 @@ plt.ylabel('Loss')
 plt.legend()
 plt.show()
 
+# @title Prediction
+sequences_mt = tokenizer.texts_to_sequences(mt_texts)
+data_mt = pad_sequences(sequences_mt, maxlen=MAX_SEQUENCE_LENGTH)
+
+# @title Aligning
+pred_proba = model.predict_proba(data_mt)
+print(pred_proba[:2])
+max_ = np.max(pred_proba, axis=1)
+argmax = np.argmax(pred_proba, axis=1)
+print(np.max(pred_proba, axis=1))
+print(np.argmax(pred_proba, axis=1))
+print('mean: ', np.mean(pred_proba, axis=1))
+
 # @title Evaluation
 argmax, max_, str([[idx, argmax[idx], max_[idx]] if elm > 0.1 else '' for idx, elm in enumerate(max_)])
-align_triples = sorted([[idx, argmax[idx], max_[idx]] if elm > 0.01 else '' for idx, elm in enumerate(max_)], key=lambda val: val[2], reverse=1)
+align_triples = sorted([[idx, argmax[idx], max_[idx]] if elm >= 0.0 else '' for idx, elm in enumerate(max_)], key=lambda val: val[2], reverse=1)
 idx = -1
 argmax, max_, align_triples
 
-idx += 1; idx, align_triples[idx], mt_texts[align_triples[idx][0]], zh_paras[align_triples[idx][0]], en_texts[align_triples[idx][1] - 1]
+idx += 1; idx, align_triples[idx], mt_texts[align_triples[idx][0]], zh_paras[align_triples[idx][0]], en_texts[align_triples[idx][1]]
 
-# @title Dieliver
+# @title Deliver
 len_en = len(en_texts)
 len_mt = len(mt_texts)
 scale = len_en/len_mt
 delta = 3
-for elm in align_triples
-    if abs(scale * elm[0] - (elm[1] - 1)) <= deta:
-        print(elm[0]], zh_paras[elm[0]], en_texts[elm[1] - 1])
+from pprint import pprint
+for idx, elm in enumerate(align_triples):
+    if abs(scale * elm[0] - (elm[1] - 1)) <= delta:
+        print('\t\t=== %s ===' % idx)
+        # pprint([elm, mt_texts[elm[0]], zh_paras[elm[0]], en_texts[elm[1] - 1]])
+        pprint([elm, mt_texts[elm[0]], zh_paras[elm[0]], en_texts[elm[1]]])
 
 # @title Plot Alignment Matrix Heattmap
 if 'hamming' in platform.node():
@@ -240,4 +281,3 @@ import seaborn as sns
 
 plt.contourf(pred_proba, levels=20, cmap="gist_heat_r")
 plt.colorbar()
-
