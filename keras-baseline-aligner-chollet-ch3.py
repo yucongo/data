@@ -2,6 +2,10 @@
 keras-baseline-aligner-chollet-ch3.ipynb
 
 https://colab.research.google.com/drive/1ldJCI5oYSUGJEvyXXT5cw-sJjnGSFeyH#scrollTo=CzGHCAVszem1&uniqifier=2
+
+%load file.py
+
+%run file.py   # file.py must comply py syntax,  %cd data not allowed
 '''
 
 import os
@@ -56,11 +60,6 @@ from txtfile_to_paras import txtfile_to_paras
 from clean_puncts import clean_puncts
 from tqdm import tqdm
 
-# INFILE =
-# texts =
-df_en = pd.read_csv(INFILE)
-NB_OUTPUT = df_en.label.value_counts().shape[0]
-
 ENFILE = 'wu_ch1_en.txt'
 ZHFILE = 'wu_ch1_zh.txt'
 
@@ -78,6 +77,11 @@ INFILE = '%s_noised.txt' % Path(ENFILE).stem
 assert Path(ENFILE).exists(), '<%s> does not exist' % ENFILE
 assert Path(ZHFILE).exists(), '<%s> does not exist' % ZHFILE
 assert Path(INFILE).exists(), '<%s> does not exist' % INFILE
+
+# INFILE =
+# texts =
+df_en = pd.read_csv(INFILE)
+NB_OUTPUT = df_en.label.value_counts().shape[0]
 
 en_paras = txtfile_to_paras(ENFILE)
 en_texts = [clean_puncts(elm).lower() for elm in en_paras]

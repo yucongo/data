@@ -12,7 +12,15 @@ from clean_puncts import clean_puncts
 from txtfile_to_paras import txtfile_to_paras
 
 def gen_train_dev(filename, numb=99):
-    ''' gen_train_dev '''
+    ''' gen_train_dev
+
+    input stem.txt
+
+    output:
+    train_stem.csv
+    test_stem.csv
+
+    '''
 
     # filename = 'wu_ch3_en.txt'
 
@@ -32,7 +40,7 @@ def gen_train_dev(filename, numb=99):
 
     # label starts at 1
     # for idx, elm in enumerate(df.text):
-    for idx, elm in enumerate(tqdm(paras, desc=' gen aux data...', leave=1)):
+    for idx, elm in enumerate(tqdm(paras, desc=' gen aux data from %s...' % filename, leave=1)):
         # df1 = pd.DataFrame({'text': [*gen_noised_doc(df.text[1], 99)]})
         _ = [*gen_noised_doc(elm, numb)]
 
@@ -79,7 +87,7 @@ def gen_train_dev(filename, numb=99):
     # df_1[['label','text']]
 
     # row slice
-    # train /dev, 0.3
+    # train / dev, 0.3
     len_ = df_1.shape[0]
     cutp = int(0.1 * len_)
     test = df_1[:cutp]
