@@ -30,8 +30,9 @@ import numpy as np
 np.prod([elm for elm in distr if elm > 0]) # 1939865600
 
 '''
-
+from pathlib import Path
 import logging
+import json
 from typing import List, Dict, Union, Generator
 from itertools import product, chain
 
@@ -49,6 +50,8 @@ from sacremoses import MosesTokenizer, MosesDetokenizer
 
 MTOK = MosesTokenizer().tokenize
 MDETOK = MosesDetokenizer().detokenize
+WN_SYNSETS_FILE = 'wn31_synsets.json'
+WN_SYNSETS = json.loads(Path(WN_SYNSETS_FILE).read_text('utf-8'))
 
 # import nltk.data
 # TOKENIZER = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -88,15 +91,19 @@ def gen_noised_doc(  # pylint: disable=too-many-locals, too-many-branches
     cand_list: Union[List, Dict] = [{''} for elm in range(len_)]
 
     for idx, word in enumerate(words):
-        for syn in wordnet.synsets(word):
+        # wordnet_synsets = load()
+        # for syn in wordnet.synsets(word):
+        for syn in WN_SYNSETS.get(word, []):
             # Do not attempt to replace proper nouns or determiners
             if tagged[idx][1] == 'NNP' or tagged[idx][1] == 'DT':
                 break
 
             word_type = tagged[idx][1][0].lower()
-            if not syn.name().find("." + word_type + ".") == -1:
+            # if not syn.name().find("." + word_type + ".") == -1:
+            if not syn.find("." + word_type + ".") == -1:
                 # extract the word only
-                name = syn.name()[0:syn.name().find(".")]
+                # name = syn.name()[0:syn.name().find(".")]
+                name = syn[0:syn.find(".")]
 
                 name = name.replace('_', ' ')
 
@@ -111,7 +118,8 @@ def gen_noised_doc(  # pylint: disable=too-many-locals, too-many-branches
 
     distr = [sum(map(lambda itm: bool(itm), elm)) for elm in cand_list]
 
-    dict_ = dict([(idx, elm[1:]) for idx, elm in enumerate(cand_list) if len(elm) > 1])
+    dict_ = dict(
+        [(idx, elm[1:]) for idx, elm in enumerate(cand_list) if len(elm) > 1])
 
     dict_1 = [[*zip([key] * len(val), val)] for key, val in dict_.items()]
 
